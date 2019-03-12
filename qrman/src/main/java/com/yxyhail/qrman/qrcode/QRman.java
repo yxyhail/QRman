@@ -30,11 +30,6 @@ import com.yxyhail.qrman.utils.PermissionUtil;
 import java.io.IOException;
 import java.util.Collection;
 
-/**
- * @author yangxinyu
- * @version V1.0
- * @date 2019.3.6 15:11:45
- */
 public class QRman implements SurfaceHolder.Callback {
     private static final String TAG = QRman.class.getSimpleName();
 

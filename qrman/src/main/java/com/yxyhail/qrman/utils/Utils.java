@@ -10,11 +10,6 @@ import com.yxyhail.logger.Logger;
 
 import java.io.ByteArrayOutputStream;
 
-/**
- * @author yangxinyu
- * @version V1.0
- * @date 2019.3.3 17:49:15
- */
 public class Utils {
 
     public static void toast(Context context, String content) {
