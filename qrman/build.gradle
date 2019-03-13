@@ -6,10 +6,10 @@ android {
 
 
     defaultConfig {
-        minSdkVersion 19
+        minSdkVersion 17
         targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "0.0.2"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -32,5 +32,24 @@ dependencies {
     implementation 'com.yanzhenjie.permission:support:2.0.1'
     implementation 'com.yxyhail:logger:1.0.0'
 }
+
+
+ext {
+    bintrayRepo = 'library'
+    bintrayName = 'QRman'
+
+    publishedGroupId = 'com.yxyhail'
+    libraryName = 'QRman'
+    artifact = "QRman"
+    userOrg = 'yxyhail'
+
+    libraryDescription = 'A Simple Zxing.'
+
+    siteUrl = 'https://github.com/yxyhail/QRman'
+    gitUrl = 'https://github.com/yxyhail/QRman.git'
+
+    libraryVersion = '0.0.2'
+}
+
 apply from: 'publish.gradle'
 

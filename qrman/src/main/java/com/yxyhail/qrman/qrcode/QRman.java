@@ -58,7 +58,7 @@ public class QRman implements SurfaceHolder.Callback {
     private int ScanStatus = 0;//0 扫描二维码 1 生成二维码 2 解析Bitmap二维码
 
     public interface QRCallback {
-        void onSuccess(QRResult rawResult, Bitmap barcode);
+        void onScanSuccess(QRman qrman, QRResult qrResult, Bitmap barcode);
     }
 
     ViewfinderView getViewfinderView() {
@@ -79,6 +79,10 @@ public class QRman implements SurfaceHolder.Callback {
 
     public QRman(Activity activity) {
         this.activity = activity;
+        if (activity instanceof QRCallback) {
+            this.qrCallback = (QRCallback) activity;
+        }
+        openQRView(this.qrCallback);
     }
 
     private void init() {
@@ -165,7 +169,7 @@ public class QRman implements SurfaceHolder.Callback {
     }
 
 
-    private class OnBackClick implements View.OnClickListener{
+    private class OnBackClick implements View.OnClickListener {
 
         @Override
         public void onClick(View v) {
@@ -174,7 +178,7 @@ public class QRman implements SurfaceHolder.Callback {
     }
 
 
-    private class OnTorchClick implements View.OnClickListener{
+    private class OnTorchClick implements View.OnClickListener {
 
         @Override
         public void onClick(View v) {
@@ -299,7 +303,7 @@ public class QRman implements SurfaceHolder.Callback {
         if (fromLiveScan && isBulk) {
 //          maybeSetClipboard(resultHandler);
             // Wait a moment or else it will scan the same barcode continuously about 3 times
-            restartPreview(BULK_MODE_SCAN_DELAY_MS);
+            restart(BULK_MODE_SCAN_DELAY_MS);
         } else {
             if (isAutoRestartAfterSuccess) {
                 handleDecodeInternally(rawResult, barcode);
@@ -313,7 +317,7 @@ public class QRman implements SurfaceHolder.Callback {
                     rawResult.getResultPoints(),
                     rawResult.getBarcodeFormat(),
                     rawResult.getTimestamp());
-            qrCallback.onSuccess(qrResult, barcode);
+            qrCallback.onScanSuccess(QRman.this, qrResult, barcode);
         }
         ScanStatus = 0;
     }
@@ -351,12 +355,6 @@ public class QRman implements SurfaceHolder.Callback {
         }
     }
 
-    /**
-     * 生成二维码
-     *
-     * @param content
-     * @return
-     */
     public Bitmap encodeQRCode(String content) {
         ScanStatus = 1;
         WindowManager manager = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
@@ -376,7 +374,7 @@ public class QRman implements SurfaceHolder.Callback {
     /**
      * 解析本地二维码
      *
-     * @param bitmap
+     * @param bitmap 需要解析的Bitmap
      */
     public void decodeQrBitmap(Bitmap bitmap) {
         ScanStatus = 2;
@@ -391,19 +389,38 @@ public class QRman implements SurfaceHolder.Callback {
      */
     public void toggleQrView(boolean isAutoRestartAfterSuccess, QRCallback qrCallback) {
         this.isAutoRestartAfterSuccess = isAutoRestartAfterSuccess;
-        this.qrCallback = qrCallback;
+        if(qrCallback != null){
+            this.qrCallback = qrCallback;
+        }
         if (addedView) {
             addedView = false;
             onPause();
             viewGroup.removeView(captureView);
         } else {
-            addedView = true;
-            if (inited) {
-                viewGroup.addView(captureView);
-                onResume();
-            } else {
-                init();
-            }
+            openQRView();
+        }
+    }
+
+    public void openQRView() {
+        openQRView(this.isAutoRestartAfterSuccess,this.qrCallback);
+    }
+
+    public void openQRView(QRCallback qrCallback) {
+       openQRView(this.isAutoRestartAfterSuccess,qrCallback);
+    }
+
+    public void openQRView(boolean isAutoRestartAfterSuccess, QRCallback qrCallback) {
+        this.isAutoRestartAfterSuccess = isAutoRestartAfterSuccess;
+        if(qrCallback != null){
+            this.qrCallback = qrCallback;
+        }
+        if(addedView) return;
+        addedView = true;
+        if (inited) {
+            viewGroup.addView(captureView);
+            onResume();
+        } else {
+            init();
         }
     }
 
@@ -420,7 +437,7 @@ public class QRman implements SurfaceHolder.Callback {
     // Put up our own UI for how to handle the decoded contents.
     private void handleDecodeInternally(Result rawResult, Bitmap barcode) {
 //        Toast.makeText(activity, rawResult.toString(), Toast.LENGTH_SHORT).show();
-        restartPreview(1000L);
+        restart(1000L);
     }
 
 
@@ -457,8 +474,11 @@ public class QRman implements SurfaceHolder.Callback {
 //        builder.show();
 //    }
 
+    public void restart() {
+        restart(800);
+    }
 
-    public void restartPreview(long delayMS) {
+    public void restart(long delayMS) {
         if (handler != null) {
             handler.sendEmptyMessageDelayed(Contents.Status.RESTART_PREVIEW, delayMS);
         }

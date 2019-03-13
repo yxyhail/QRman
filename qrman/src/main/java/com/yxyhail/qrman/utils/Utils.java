@@ -25,12 +25,7 @@ public class Utils {
         Logger.e(content);
     }
 
-    /**
-     * Bitmap 转 ByteArray
-     *
-     * @param bitmap
-     * @return
-     */
+
     public static byte[] bitmapToByteArr(Bitmap bitmap) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {

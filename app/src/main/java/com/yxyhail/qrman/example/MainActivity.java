@@ -8,17 +8,17 @@ import com.yxyhail.qrman.qrcode.QRResult;
 import com.yxyhail.qrman.qrcode.QRman;
 import com.yxyhail.qrman.utils.Utils;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements QRman.QRCallback {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        QRman qRman = new QRman(this);
-        qRman.toggleQrView(true, new QRman.QRCallback() {
-            @Override
-            public void onSuccess(QRResult qrResult, Bitmap barcode) {
-                Utils.toast(MainActivity.this,qrResult.getText());
-            }
-        });
+        new QRman(this);
+    }
+
+    @Override
+    public void onScanSuccess(QRman qrman, QRResult rawResult, Bitmap barcode) {
+        Utils.toast(MainActivity.this,rawResult.getText());
+        qrman.restart();
     }
 }

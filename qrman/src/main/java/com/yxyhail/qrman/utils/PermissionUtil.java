@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 
 import com.yanzhenjie.permission.Action;
@@ -38,12 +37,12 @@ public class PermissionUtil {
     }
 
 
-    public PermissionUtil request(@NonNull PermissionGranted granted) {
+    public PermissionUtil request(PermissionGranted granted) {
         return request(granted, null);
     }
 
 
-    public PermissionUtil request(@NonNull final PermissionGranted granted, final PermissionDenied denied) {
+    public PermissionUtil request(final PermissionGranted granted, final PermissionDenied denied) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (typeList.isEmpty()) {
                 granted.onGranted(TYPE_RESPONSE_ALL_GRANTED);
