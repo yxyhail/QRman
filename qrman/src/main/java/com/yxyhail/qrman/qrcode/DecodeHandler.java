@@ -72,19 +72,25 @@ final class DecodeHandler extends Handler {
      * @param height The height of the preview frame.
      */
     public void decode(byte[] data, int width, int height) {
-        Result rawResult = null;
-        PlanarYUVLuminanceSource source = qrman.getCameraManager().buildLuminanceSource(data, width, height);
-        if (source != null) {
-            BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-            try {
-                rawResult = multiFormatReader.decodeWithState(bitmap);
-            } catch (ReaderException re) {
-                // continue
-            } finally {
-                multiFormatReader.reset();
+        try {
+            Result rawResult = null;
+            PlanarYUVLuminanceSource source = qrman.getCameraManager().buildLuminanceSource(data, width, height);
+            if (source != null) {
+                BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+                try {
+                    rawResult = multiFormatReader.decodeWithState(bitmap);
+                } catch (ReaderException re) {
+                    // continue
+                } finally {
+                    multiFormatReader.reset();
+                }
             }
+            sendScanResult(rawResult, bundleThumbnail(source, null));
+        } catch (Exception e) {
+            sendScanResult(null, null);
+            e.printStackTrace();
         }
-        sendScanResult(rawResult, bundleThumbnail(source, null));
+
     }
 
     /**
@@ -111,6 +117,9 @@ final class DecodeHandler extends Handler {
     }
 
     private static Bundle bundleThumbnail(LuminanceSource source, int[] pixels) {
+        if (source == null) {
+            return null;
+        }
         Bundle bundle = new Bundle();
         int width;
         int height;

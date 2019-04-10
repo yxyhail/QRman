@@ -48,7 +48,7 @@ ext {
     siteUrl = 'https://github.com/yxyhail/QRman'
     gitUrl = 'https://github.com/yxyhail/QRman.git'
 
-    libraryVersion = '0.0.2'
+    libraryVersion = '0.0.3'
 }
 
 apply from: 'publish.gradle'
