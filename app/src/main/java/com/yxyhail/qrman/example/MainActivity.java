@@ -1,8 +1,9 @@
 package com.yxyhail.qrman.example;
 
 import android.graphics.Bitmap;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.yxyhail.qrman.qrcode.QRResult;
 import com.yxyhail.qrman.qrcode.QRman;

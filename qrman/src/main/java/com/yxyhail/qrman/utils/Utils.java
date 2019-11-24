@@ -2,11 +2,10 @@ package com.yxyhail.qrman.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.widget.Toast;
 
-import com.yxyhail.logger.BuildConfig;
-import com.yxyhail.logger.LogFormatter;
-import com.yxyhail.logger.Logger;
+import com.yxyhail.qrman.BuildConfig;
 
 import java.io.ByteArrayOutputStream;
 
@@ -17,12 +16,9 @@ public class Utils {
     }
 
     public static void log(String content) {
-        LogFormatter logFormatter = LogFormatter.onBuilder()
-                .isLogEnable(BuildConfig.DEBUG)
-                .setGlobalTag("QRman")
-                .extraMethodOffset(1).build();
-        Logger.initFormatter(logFormatter);
-        Logger.e(content);
+        if (BuildConfig.DEBUG) {
+            Log.i("QRman", content);
+        }
     }
 
 

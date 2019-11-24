@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-    <string name="flash_hint">轻触照亮</string>
-    <string name="scan_qr_code">扫描二维码</string>
+    <string name="qr_flash_hint">轻触照亮</string>
+    <string name="qr_scan_qr_code">扫描二维码</string>
 
 </resources>

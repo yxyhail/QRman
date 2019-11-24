@@ -334,7 +334,7 @@ public class QRman implements SurfaceHolder.Callback {
         if (points != null && points.length > 0) {
             Canvas canvas = new Canvas(barcode);
             Paint paint = new Paint();
-            paint.setColor(activity.getResources().getColor(R.color.result_points));
+            paint.setColor(activity.getResources().getColor(R.color.qr_result_points));
             if (points.length == 2) {
                 paint.setStrokeWidth(4.0f);
                 drawLine(canvas, paint, points[0], points[1], scaleFactor);
